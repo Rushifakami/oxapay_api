@@ -2,7 +2,7 @@ import requests
 from .constants.api_constants import _GENERAL_API_URL, _METHODS
 
 class SyncClient:
-    def __request(self, method: str, endpoint: str, json_data=None):
+    def request(self, method: str, endpoint: str, json_data=None):
         if method not in _METHODS:
             raise ValueError(f'Unsupported method "{method}".')
         url = f'{_GENERAL_API_URL}/{endpoint}'

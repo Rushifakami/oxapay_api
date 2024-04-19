@@ -2,7 +2,7 @@ import aiohttp
 from .constants.api_constants import _GENERAL_API_URL, _METHODS
 
 class AsyncClient():
-    async def __request(self, method: str, endpoint: str, json_data=None):
+    async def request(self, method: str, endpoint: str, json_data=None):
         if method not in _METHODS:
             raise ValueError(f'Unsupported method "{method}".')
         async with aiohttp.ClientSession() as session:
