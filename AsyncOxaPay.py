@@ -1,6 +1,7 @@
 from .clients.AsyncClient import AsyncClient
-from .utils.response_models import PaymentStatus, OrderStatus, PaymentHistory
+from .utils.response_models import PaymentStatus, OrderStatus
 from typing import Union
+
 
 class AsyncOxaPay:
     def __init__(self, merchant_api_key: str, sandbox: bool = False):
