@@ -1,0 +1,22 @@
+Metadata-Version: 2.1
+Name: oxapay_api
+Version: 1.0.2
+Summary: Unofficial library for interacting with the OxaPay API. See github for more info: https://github.com/Rushifakami/oxapay_api
+Home-page: https://github.com/Rushifakami/oxapay_api
+Author: Rushifakami
+License: MIT
+Keywords: crypto,oxapay,gateway,payment,api
+Classifier: Development Status :: 5 - Production/Stable
+Classifier: Intended Audience :: Developers
+Classifier: License :: OSI Approved :: MIT License
+Classifier: Programming Language :: Python :: 3
+Classifier: Programming Language :: Python :: 3.6
+Classifier: Programming Language :: Python :: 3.7
+Classifier: Programming Language :: Python :: 3.8
+Classifier: Programming Language :: Python :: 3.9
+Classifier: Programming Language :: Python :: 3.10
+Classifier: Programming Language :: Python :: 3.11
+Requires-Python: >=3.6
+Requires-Dist: aiohttp
+Requires-Dist: requests
+Requires-Dist: urllib3
