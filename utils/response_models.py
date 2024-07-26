@@ -3,7 +3,7 @@ class OrderStatus:
             self,
             result: int,
             message: str = None,
-            trackId: str =None,
+            trackId: str = None,
             expiredAt: int = None,
             payLink: str = None
     ):
@@ -25,6 +25,7 @@ class PaymentStatus:
             currency: str = None,
             payAmount: str = None,
             payCurrency: str = None,
+            receivedAmount: str = None,
             rate: str = None,
             network: str = None,
             feePaidByPayer: float = None,
@@ -49,6 +50,7 @@ class PaymentStatus:
         self.currency = currency
         self.payAmount = payAmount
         self.payCurrency = payCurrency
+        self.receivedAmount = receivedAmount
         self.rate = rate
         self.network = network
         self.feePaidByPayer = feePaidByPayer
