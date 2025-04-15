@@ -3,7 +3,7 @@ from setuptools import setup, find_packages
 
 setup(
     name='oxapay_api',
-    version='1.0.2',
+    version='1.1.0',
     author='Rushifakami',
     description='Unofficial library for interacting with the OxaPay API. See github for more info: https://github.com/Rushifakami/oxapay_api',
     packages=find_packages(),
