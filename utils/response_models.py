@@ -1,65 +1,29 @@
-class OrderStatus:
-    def __init__(
-            self,
-            result: int,
-            message: str = None,
-            trackId: str = None,
-            expiredAt: int = None,
-            payLink: str = None
-    ):
-        self.result = result
-        self.message = message
-        self.trackId = trackId
-        self.expiredAt = expiredAt
-        self.payLink = payLink
+from dataclasses import dataclass
 
+@dataclass
+class OrderStatus:
+    track_id: str
+    payment_url: str
+    expired_at: int
+    date: int
+
+@dataclass
 class PaymentStatus:
-    def __init__(
-            self,
-            result: int,
-            message: str = None,
-            trackId: str = None,
-            createdAt: str = None,
-            address: str = None,
-            amount: str = None,
-            currency: str = None,
-            payAmount: str = None,
-            payCurrency: str = None,
-            receivedAmount: str = None,
-            rate: str = None,
-            network: str = None,
-            feePaidByPayer: float = None,
-            underPaidCover: float = None,
-            status: str = None,
-            type: str = None,
-            txID: str = None,
-            date: str = None,
-            expiredAt: str = None,
-            payDate: str = None,
-            email: str = None,
-            orderId: str = None,
-            description: str = None
-    ):
-        self.result = result
-        self.message = message
-        self.trackId = trackId
-        self.createdAt = createdAt
-        self.status = status
-        self.address = address
-        self.amount = amount
-        self.currency = currency
-        self.payAmount = payAmount
-        self.payCurrency = payCurrency
-        self.receivedAmount = receivedAmount
-        self.rate = rate
-        self.network = network
-        self.feePaidByPayer = feePaidByPayer
-        self.underPaidCover = underPaidCover
-        self.type = type
-        self.txID = txID
-        self.date = date
-        self.expiredAt = expiredAt
-        self.payDate = payDate
-        self.email = email
-        self.orderId = orderId
-        self.description = description
+    track_id: str
+    type: str
+    amount: int
+    currency: str
+    status: str
+    mixed_payment: bool
+    fee_paid_by_payer: int
+    under_paid_coverage: float
+    lifetime: int
+    callback_url: str
+    return_url: str
+    email: str
+    order_id: str
+    description: str
+    thanks_message: str
+    expired_at: int
+    date: int
+    txs: list
