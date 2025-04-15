@@ -22,6 +22,8 @@ class AsyncClient:
                             return await response.json()
                         else:
                             return await response.text()
+                    elif response.status == 400:
+                        raise ValueError(await response.json())
                     else:
                         raise Exception(f'Failed to make request: {response.status} - {response.reason}')
             else:

@@ -24,5 +24,7 @@ class SyncClient:
                 return response.json()
             else:
                 return response.text
+        elif response.status_code == 400:
+            raise ValueError(response.json())
         else:
             raise Exception(f'Failed to make request: {response.status_code} - {response.reason}')
