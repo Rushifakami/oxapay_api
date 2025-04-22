@@ -261,13 +261,47 @@ class SyncOxaPay:
         except Exception as e:
             raise Exception(f"Error revoking static wallet: {e}")
 
-    def get_static_address_list(self):
-        """
 
+    def get_static_address_list(
+            self,
+            track_id: int = None,
+            network: str = None,
+            currency: str = None,
+            address: str = None,
+            have_tx: bool = None,
+            order_id: str = None,
+            email: str = None,
+            page: int = 1,
+            size: int = 10,
+    ):
+        """
+        Use this endpoint to retrieve a list of static addresses associated with a specific business. The list can be filtered by various criteria, such as trackId, address, network, email and orderId. Pagination is also available to fetch the results in smaller sets.
+
+        :param track_id: Filter addresses by a specific ID. Defaults to None.
+        :param network: Filter addresses by the expected blockchain network for the specified crypto currency. Defaults to None.
+        :param currency: Filter addresses by the expected currency. Defaults to None.
+        :param address: Filter static addresses by the expected address. It’s better to filter static addresses. Defaults to None.
+        :param have_tx: Filter the addresses that had transactions. Defaults to None.
+        :param order_id: Filter addresses by a unique order ID for reference. Defaults to None.
+        :param email: Filter addresses by the email. Defaults to None.
+        :param page: The page number of the results you want to retrieve. Possible values: from 1 to the total number of pages - default 1.
+        :param size: Number of records to display per page. Possible values: from 1 to 200. Default: 1.
         :return:
         """
+        data = {
+            'track_id': track_id,
+            'network': network,
+            'currency': currency,
+            'address': address,
+            'have_tx': have_tx,
+            'order_id': order_id,
+            'email': email,
+            'page': page,
+            'size': size,
+        }
+        query_params = {k: v for k, v in data.items() if v is not None}
         try:
-            return self._client.request('GET', 'payment/static-address')
+            return self._client.request('GET', 'payment/static-address', query_params=query_params)
         except Exception as e:
             raise Exception(f"Error getting static address list: {e}")
 
