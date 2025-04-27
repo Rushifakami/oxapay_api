@@ -1,13 +1,16 @@
+from typing import Optional
+
 from .clients.SyncClient import SyncClient
 from .utils.response_models import PaymentStatus, OrderStatus
 
 class SyncOxaPay:
-    def __init__(self, merchant_api_key: str):
+    def __init__(self, merchant_api_key: str, timeout: Optional[int] = None):
         """
         :param merchant_api_key: The merchant's API key for authentication
+        :param timeout: Optional timeout for requests in seconds
         """
         self.merchant_api_key = merchant_api_key
-        self._client = SyncClient(self.merchant_api_key)
+        self._client = SyncClient(self.merchant_api_key, timeout=timeout)
 
     def get_api_status(self):
         """
