@@ -4,13 +4,13 @@ from .clients.SyncClient import SyncClient
 from .utils.response_models import PaymentStatus, OrderStatus
 
 class SyncOxaPay:
-    def __init__(self, merchant_api_key: str, timeout: Optional[int] = None):
+    def __init__(self, merchant_api_key: str, general_api_key: Optional[str] = None, timeout: Optional[int] = None):
         """
-        :param merchant_api_key: The merchant's API key for authentication
+        :param merchant_api_key: The merchant's API key for authentication for payments processing
+        :param general_api_key: Optional general API key for authentication for account requests
         :param timeout: Optional timeout for requests in seconds
         """
-        self.merchant_api_key = merchant_api_key
-        self._client = SyncClient(self.merchant_api_key, timeout=timeout)
+        self._client = SyncClient(merchant_api_key, general_api_key=general_api_key, timeout=timeout)
 
     def get_api_status(self):
         """
@@ -381,3 +381,19 @@ class SyncOxaPay:
             return self._client.request('GET', 'common/prices')
         except Exception as e:
             raise Exception(f"Error getting prices: {e}")
+
+    def get_account_balance(self, currency: str = None):
+        """
+        Retrieves the account balance for all wallets associated with a user.
+
+        :param currency: Optional. Specify a specific currency to get the balance for that currency.
+        :return: The account balance information.
+        """
+        params = {}
+        if currency:
+            params['currency'] = currency
+
+        try:
+            return self._client.request('GET', 'general/account/balance', query_params=params)
+        except Exception as e:
+            raise Exception(f"Error getting account balance: {e}")

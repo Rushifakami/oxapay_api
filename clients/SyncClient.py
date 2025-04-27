@@ -4,11 +4,13 @@ import requests
 from .constants.api_constants import _GENERAL_API_URL, _METHODS
 
 class SyncClient:
-    def __init__(self, merchant_api_key: str, timeout: Optional[int] = None):
+    def __init__(self, merchant_api_key: str, general_api_key: Optional[str] = None, timeout: Optional[int] = None):
         self._headers = {
             "merchant_api_key": merchant_api_key,
             "Content-Type": "application/json"
         }
+        if general_api_key:
+            self._headers["general_api_key"] = general_api_key
         self._timeout = timeout
 
     def request(self, method: str, endpoint: str, query_params=None, json_data=None):
