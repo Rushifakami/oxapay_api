@@ -1,13 +1,16 @@
+from typing import Optional
+
 from .clients.SyncClient import SyncClient
 from .utils.response_models import PaymentStatus, OrderStatus
 
 class SyncOxaPay:
-    def __init__(self, merchant_api_key: str):
+    def __init__(self, merchant_api_key: str, general_api_key: Optional[str] = None, timeout: Optional[int] = None):
         """
-        :param merchant_api_key: The merchant's API key for authentication
+        :param merchant_api_key: The merchant's API key for authentication for payments processing
+        :param general_api_key: Optional general API key for authentication for account requests
+        :param timeout: Optional timeout for requests in seconds
         """
-        self.merchant_api_key = merchant_api_key
-        self._client = SyncClient(self.merchant_api_key)
+        self._client = SyncClient(merchant_api_key, general_api_key=general_api_key, timeout=timeout)
 
     def get_api_status(self):
         """
@@ -16,8 +19,8 @@ class SyncOxaPay:
         """
         try:
             return self._client.request('GET', 'common/monitor')
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting status: {e}")
 
     def create_invoice(
             self,
@@ -106,8 +109,8 @@ class SyncOxaPay:
         """
         try:
             return self._client.request('GET', 'common/currencies')
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting supported currencies: {e}")
 
     def get_supported_networks(self):
         """
@@ -117,8 +120,8 @@ class SyncOxaPay:
         """
         try:
             return self._client.request('GET', 'common/networks')
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting supported networks: {e}")
 
     def get_supported_fiat_currencies(self):
         """
@@ -128,8 +131,8 @@ class SyncOxaPay:
         """
         try:
             return self._client.request('GET', 'common/fiats')
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception (f"Error getting supported fiat currencies: {e}")
 
     def get_payment_information(self, track_id: int, raw_response: bool = False):
         """
@@ -144,8 +147,8 @@ class SyncOxaPay:
                 return response_data
             else:
                 return PaymentStatus(**response_data["data"])
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting payment information: {e}")
 
     def create_white_label_payment(
             self,
@@ -200,8 +203,8 @@ class SyncOxaPay:
         }
         try:
             return self._client.request('POST', 'payment/white-label', json_data=payment_data)
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error creating white label payment: {e}")
 
     def create_static_address(
             self,
@@ -243,8 +246,8 @@ class SyncOxaPay:
 
         try:
             return self._client.request('POST', 'payment/static-address', json_data=static_address_data)
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error creating static address: {e}")
 
     def revoke_static_wallet(self, address: str):
         """
@@ -258,18 +261,52 @@ class SyncOxaPay:
         }
         try:
             return self._client.request('POST', 'payment/static-address/revoke', json_data=data)
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error revoking static wallet: {e}")
 
-    def get_static_address_list(self):
+
+    def get_static_address_list(
+            self,
+            track_id: int = None,
+            network: str = None,
+            currency: str = None,
+            address: str = None,
+            have_tx: bool = None,
+            order_id: str = None,
+            email: str = None,
+            page: int = 1,
+            size: int = 10,
+    ):
         """
+        Use this endpoint to retrieve a list of static addresses associated with a specific business. The list can be filtered by various criteria, such as trackId, address, network, email and orderId. Pagination is also available to fetch the results in smaller sets.
 
+        :param track_id: Filter addresses by a specific ID. Defaults to None.
+        :param network: Filter addresses by the expected blockchain network for the specified crypto currency. Defaults to None.
+        :param currency: Filter addresses by the expected currency. Defaults to None.
+        :param address: Filter static addresses by the expected address. It’s better to filter static addresses. Defaults to None.
+        :param have_tx: Filter the addresses that had transactions. Defaults to None.
+        :param order_id: Filter addresses by a unique order ID for reference. Defaults to None.
+        :param email: Filter addresses by the email. Defaults to None.
+        :param page: The page number of the results you want to retrieve. Possible values: from 1 to the total number of pages - default 1.
+        :param size: Number of records to display per page. Possible values: from 1 to 200. Default: 1.
         :return:
         """
+        data = {
+            'track_id': track_id,
+            'network': network,
+            'currency': currency,
+            'address': address,
+            'have_tx': have_tx,
+            'order_id': order_id,
+            'email': email,
+            'page': page,
+            'size': size,
+        }
+        query_params = {k: v for k, v in data.items() if v is not None}
         try:
-            return self._client.request('GET', 'payment/static-address')
-        except Exception:
-            raise Exception
+            return self._client.request('GET', 'payment/static-address', query_params=query_params)
+        except Exception as e:
+            raise Exception(f"Error getting static address list: {e}")
 
     def get_payment_history(
             self,
@@ -330,17 +367,33 @@ class SyncOxaPay:
         query_params = {k: v for k, v in data.items() if v is not None}
         try:
             return self._client.request('GET', 'payment', query_params=query_params)
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting payment history: {e}")
 
     def get_accepted_currencies(self):
         try:
             return self._client.request('GET', 'payment/accepted-currencies')
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting accepted currencies: {e}")
 
     def get_prices(self):
         try:
             return self._client.request('GET', 'common/prices')
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting prices: {e}")
+
+    def get_account_balance(self, currency: str = None):
+        """
+        Retrieves the account balance for all wallets associated with a user.
+
+        :param currency: Optional. Specify a specific currency to get the balance for that currency.
+        :return: The account balance information.
+        """
+        params = {}
+        if currency:
+            params['currency'] = currency
+
+        try:
+            return self._client.request('GET', 'general/account/balance', query_params=params)
+        except Exception as e:
+            raise Exception(f"Error getting account balance: {e}")
