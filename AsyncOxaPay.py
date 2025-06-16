@@ -17,8 +17,8 @@ class AsyncOxaPay:
         """
         try:
             return await self._client.request('GET', 'common/monitor')
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting status: {e}")
 
     async def create_invoice(
             self,
@@ -96,8 +96,8 @@ class AsyncOxaPay:
                 return response_data
             else:
                 return OrderStatus(**response_data["data"])
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error creating invoice: {e}")
 
     async def get_supported_currencies(self):
         """
@@ -107,8 +107,8 @@ class AsyncOxaPay:
         """
         try:
             return await self._client.request('GET', 'common/currencies')
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting supported currencies: {e}")
 
     async def get_supported_networks(self):
         """
@@ -118,8 +118,8 @@ class AsyncOxaPay:
         """
         try:
             return await self._client.request('GET', 'common/networks')
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting supported networks: {e}")
 
     async def get_supported_fiat_currencies(self):
         """
@@ -129,8 +129,8 @@ class AsyncOxaPay:
         """
         try:
             return await self._client.request('GET', 'common/fiats')
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting supported fiat currencies: {e}")
 
     async def get_payment_information(self, track_id: int, raw_response: bool = False):
         """
@@ -145,8 +145,8 @@ class AsyncOxaPay:
                 return response_data
             else:
                 return PaymentStatus(**response_data["data"])
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting payment information: {e}")
 
     async def create_white_label_payment(
             self,
@@ -201,8 +201,8 @@ class AsyncOxaPay:
         }
         try:
             return await self._client.request('POST', 'payment/white-label', json_data=payment_data)
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error creating white label payment: {e}")
 
     async def create_static_address(
             self,
@@ -244,8 +244,8 @@ class AsyncOxaPay:
 
         try:
             return await self._client.request('POST', 'payment/static-address', json_data=static_address_data)
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error creating static address: {e}")
 
     async def revoke_static_wallet(self, address: str):
         """
@@ -259,8 +259,8 @@ class AsyncOxaPay:
         }
         try:
             return await self._client.request('POST', 'payment/static-address/revoke', json_data=data)
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error revoking static wallet: {e}")
 
     async def get_static_address_list(self):
         """
@@ -269,8 +269,8 @@ class AsyncOxaPay:
         """
         try:
             return await self._client.request('GET', 'payment/static-address')
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting static address list: {e}")
 
     async def get_payment_history(
             self,
@@ -331,17 +331,17 @@ class AsyncOxaPay:
         query_params = {k: v for k, v in data.items() if v is not None}
         try:
             return await self._client.request('GET', 'payment', query_params=query_params)
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting payment history: {e}")
 
     async def get_accepted_currencies(self):
         try:
             return await self._client.request('GET', 'payment/accepted-currencies')
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting accepted currencies: {e}")
 
     async def get_prices(self):
         try:
             return await self._client.request('GET', 'common/prices')
-        except Exception:
-            raise Exception
+        except Exception as e:
+            raise Exception(f"Error getting prices: {e}")
