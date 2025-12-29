@@ -25,5 +25,6 @@ class PaymentStatus:
     description: str
     thanks_message: str
     expired_at: int
+    sandbox: bool
     date: int
     txs: list
