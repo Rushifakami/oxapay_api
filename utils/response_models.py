@@ -11,7 +11,7 @@ class OrderStatus:
 class PaymentStatus:
     track_id: str
     type: str
-    amount: int
+    amount: float
     currency: str
     status: str
     mixed_payment: bool
